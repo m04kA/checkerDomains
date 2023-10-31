@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'checkerApp',
+    'drf_api_logger',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'checkerDomains.urls'
@@ -162,3 +164,8 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DRF_API_LOGGER_DATABASE = True
+DRF_LOGGER_INTERVAL = 5
+DRF_API_LOGGER_PATH_TYPE = 'ABSOLUTE'
+DRF_API_LOGGER_TRACING_ID_HEADER_NAME: str = 'X_TRACING_ID'
