@@ -12,6 +12,7 @@ from checkerApp.models import UserDomainsHistory
 from checkerApp.serializers import DomainsHistorySerializer
 from checkerApp.src import linksParser
 from checkerApp import serializers
+from checkerApp.tasks import add_data_in_database
 
 logger = logging.getLogger(__name__)
 
@@ -37,15 +38,11 @@ class LinksView(APIView):
             return Response({'message': 'Internal error', 'code': 'internal_error'}, status=500)
 
         now_timestamp_seconds = int((timezone.now() - datetime.datetime(1970, 1, 1, tzinfo=pytz.utc)).total_seconds())
-        try:
-            self._generate_user_history_rows(
-                user_id=user_id,
-                domains=domains,
-                now=now_timestamp_seconds
-            )
-        except Exception as exc:
-            logger.error('Error while save history data; user_id: %s; Error: %s', user_id, exc)
-            return Response({'message': 'Internal error', 'code': 'internal_error'}, status=500)
+        add_data_in_database.delay(
+            user_id,
+            domains,
+            now_timestamp_seconds
+        )
 
         return Response({'status': 'Ok'})
 

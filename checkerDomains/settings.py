@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-$u=5u3n440q*w1**cf67un^uxz6vrgg=$szvs%sf)nijwbl1-e
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -111,35 +109,34 @@ LOGGING = {
 
 WSGI_APPLICATION = 'checkerDomains.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#      'ENGINE': 'django.db.backends.postgresql',
-#      'HOST': os.environ.get('DB_HOST'),
-#      'NAME': os.environ.get('DB_NAME'),
-#      'USER': os.environ.get('DB_USER'),
-#      'PASSWORD': os.environ.get('DB_PASS'),
-#     },
-#     'logs': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-#
-# DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'
-
-# For local debug
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+    },
+    'logs': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-DRF_API_LOGGER_DEFAULT_DATABASE = 'default'
+DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'
+
+# For local debug
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+#
+# DRF_API_LOGGER_DEFAULT_DATABASE = 'default'
 
 
 # Password validation
@@ -160,7 +157,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -173,7 +169,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -190,5 +185,5 @@ DRF_LOGGER_INTERVAL = 5
 DRF_API_LOGGER_PATH_TYPE = 'ABSOLUTE'
 DRF_API_LOGGER_TRACING_ID_HEADER_NAME: str = 'X_TRACING_ID'
 
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
-CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND', 'redis://redis:6379/0')
