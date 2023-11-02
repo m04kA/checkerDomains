@@ -17,3 +17,7 @@ RUN pip install -r requirements.txt
 COPY . /usr/src/app
 
 EXPOSE 8000
+
+ADD docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod a+x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]

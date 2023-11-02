@@ -1,4 +1,11 @@
+import datetime
+import logging
+
 from rest_framework import serializers
+
+from checkerApp.models import UserDomainsHistory
+
+logger = logging.getLogger(__name__)
 
 
 class VisitedLinksSerializer(serializers.Serializer):
@@ -16,4 +23,14 @@ class ViewPeriodSerializer(serializers.Serializer):
         """
         if data['start'] > data['finish']:
             raise serializers.ValidationError('start period more than finish')
+        if data['start'] < 0:
+            raise serializers.ValidationError('start period should be more 0')
+        if data['finish'] < 0:
+            raise serializers.ValidationError('start period should be more 0')
         return data
+
+
+class DomainsHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserDomainsHistory
+        fields = ('user_id', 'domain', 'created_at',)
