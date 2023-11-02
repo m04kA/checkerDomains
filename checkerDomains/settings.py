@@ -127,7 +127,7 @@ DATABASES = {
     }
 }
 
-DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'
+DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'  # better for logs use elastic
 
 if 'test' in sys.argv:
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
