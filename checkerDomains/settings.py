@@ -90,7 +90,7 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'formatter': 'logging',
-            'filename': 'debug.log'
+            'filename': 'logs/debug.log'
         }
     },
     'loggers': {
@@ -115,31 +115,31 @@ WSGI_APPLICATION = 'checkerDomains.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-     'ENGINE': 'django.db.backends.postgresql',
-     'HOST': os.environ.get('DB_HOST'),
-     'NAME': os.environ.get('DB_NAME'),
-     'USER': os.environ.get('DB_USER'),
-     'PASSWORD': os.environ.get('DB_PASS'),
-    },
-    'logs': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'
-
-# For local debug
 # DATABASES = {
 #     'default': {
+#      'ENGINE': 'django.db.backends.postgresql',
+#      'HOST': os.environ.get('DB_HOST'),
+#      'NAME': os.environ.get('DB_NAME'),
+#      'USER': os.environ.get('DB_USER'),
+#      'PASSWORD': os.environ.get('DB_PASS'),
+#     },
+#     'logs': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
 #
-# DRF_API_LOGGER_DEFAULT_DATABASE = 'default'
+# DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'
+
+# For local debug
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+DRF_API_LOGGER_DEFAULT_DATABASE = 'default'
 
 
 # Password validation
@@ -189,3 +189,6 @@ DRF_API_LOGGER_DATABASE = True
 DRF_LOGGER_INTERVAL = 5
 DRF_API_LOGGER_PATH_TYPE = 'ABSOLUTE'
 DRF_API_LOGGER_TRACING_ID_HEADER_NAME: str = 'X_TRACING_ID'
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
