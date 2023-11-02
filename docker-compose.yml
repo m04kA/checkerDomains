@@ -8,8 +8,6 @@ services:
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - ./data/:/usr/src/data/
-#    stdin_open: true
-#    tty: true
     ports:
       - 8000:8000
     env_file:
@@ -20,10 +18,41 @@ services:
     image: postgres:14.4-alpine
     volumes:
       - ./postgresql/data/:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=supersecretPASS
-      - POSTGRES_DB=user_active
-      - DB_PORT=5432
+    env_file:
+      - ./.env.db
     ports:
       - 5432:5432
+
+  celery:
+    build: .
+    command: celery --app=checkerDomains worker --loglevel=info --logfile=logs/celery.log
+    restart: always
+    volumes:
+      - ./celery/data/:/usr/src/data/celery
+    env_file:
+      - ./.env.celery.flower
+    depends_on:
+      - web
+      - redis
+      - db
+
+  dashboard:
+    build: .
+    command: celery flower -app=checkerDomains --port=5555 --broker=redis://redis:6379/0
+    restart: always
+    ports:
+      - 5555:5555
+    env_file:
+      - ./.env.celery.flower
+    depends_on:
+      - web
+      - redis
+      - celery
+      - db
+
+  redis:
+    image: redis:4-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/data/:/usr/src/app
