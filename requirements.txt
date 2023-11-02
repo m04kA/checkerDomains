@@ -6,6 +6,8 @@ djangorestframework==3.14.0
 drf-api-logger==1.1.14
 importlib-metadata==6.7.0
 Markdown==3.4.4
+psycopg2==2.9.9
+psycopg2-binary==2.9.9
 pytz==2023.3.post1
 six==1.16.0
 sqlparse==0.4.4
