@@ -27,6 +27,8 @@ prompt-toolkit==3.0.39
 psycopg2==2.9.9
 psycopg2-binary==2.9.9
 pytest==7.4.3
+pytest-celery==0.0.0
+pytest-django==4.6.0
 python-dateutil==2.8.2
 pytz==2023.3.post1
 redis==4.6.0
