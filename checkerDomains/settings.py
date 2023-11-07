@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 import sys
 from pathlib import Path
+import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -127,21 +128,18 @@ DATABASES = {
     }
 }
 
-DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'  # better for logs use elastic
-
-if 'test' in sys.argv:
-    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
-    DATABASES['default']['NAME'] = BASE_DIR / 'db.sqlite.test3'
-
-# For local debug
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-#
-# DRF_API_LOGGER_DEFAULT_DATABASE = 'default'
+if not (
+        os.environ.get('DB_HOST')
+        and os.environ.get('DB_NAME')
+        and os.environ.get('DB_USER')
+        and os.environ.get('DB_PASS')
+):
+    logging.error('DB_info is not exist!!!')
+    DATABASES['default'] = DATABASES['logs']
+    del DATABASES['logs']
+    DRF_API_LOGGER_DEFAULT_DATABASE = 'default'
+else:
+    DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'  # better for logs use elastic
 
 
 # Password validation
