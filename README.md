@@ -23,7 +23,8 @@ For start use comands:
 Для тестирования функционала можно использовать команды:
 Для создания записи о пользователе
 
-```curl --location 'http://127.0.0.1:8000/visited_links' \
+```
+curl --location 'http://127.0.0.1:8000/visited_links' \
 --header 'X-User-Id: 1' \
 --header 'Content-Type: application/json' \
 --data '{
