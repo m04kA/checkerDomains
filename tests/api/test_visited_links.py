@@ -26,6 +26,7 @@ def test_green_flow(mock_delay):
 
     assert {'status': 'Ok'} == response.data
     assert response.status_code == 200
+    # надо проверить что записалось в бд или как минимум что поставилась задача
 
 
 def test_has_not_access():
@@ -58,6 +59,7 @@ def test_wrong_body():
     assert response.status_code == 400
 
 
+# вот это надо тестировать в отдельном месте
 def test_unit_get_domains_from_links():
     expected_domains = {"ya.ru", "sber.ru", "stackoverflow.com"}
     links = [

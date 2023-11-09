@@ -8,6 +8,7 @@ from checkerDomains.celery import app
 logger = logging.getLogger(__name__)
 
 
+# тут нужны ретраи
 @app.task
 def add_data_in_database(user_id: str, domains: typing.List[str], now: int):
     logger.info('Start task for load data user_id: %s', user_id)
@@ -29,9 +30,16 @@ def add_data_in_database(user_id: str, domains: typing.List[str], now: int):
                 serializer_row_database.errors
             )
             continue
+        # что нужно было сделать
+        '''
+        1. пытаешься добавить запись в базу
+        2. если получилось, то все круто, продолжаешь
+        3. если упал с ошибкой DuplicateError, значит ты уже записывал инфу о связке пользователь - время - домен, такую ошибку мы просто игнорируем
+        4. остальные ошибки не игнорируем, падаем
+        '''
         try:
             UserDomainsHistory.objects.create(**serializer_row_database.validated_data)
-        except Exception as exc:
+        except Exception as exc:  # too common
             logger.error('Error while save history data; user_id: %s; Error: %s', user_id, exc)
             raise exc
     logger.info('Finish task for load data user_id: %s', user_id)
