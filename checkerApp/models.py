@@ -16,4 +16,5 @@ class UserDomainsHistory(models.Model):
         unique_together = ('user_id', 'domain', 'created_at',)
 
     def __str__(self):
+        # тут надо возвращать строку, это хуйня для админки и дебага
         return self.user_id, self.domain, self.created_at

@@ -122,24 +122,7 @@ DATABASES = {
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS'),
     },
-    'logs': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
 }
-
-if not (
-        os.environ.get('DB_HOST')
-        and os.environ.get('DB_NAME')
-        and os.environ.get('DB_USER')
-        and os.environ.get('DB_PASS')
-):
-    logging.error('DB_info is not exist!!!')
-    DATABASES['default'] = DATABASES['logs']
-    del DATABASES['logs']
-    DRF_API_LOGGER_DEFAULT_DATABASE = 'default'
-else:
-    DRF_API_LOGGER_DEFAULT_DATABASE = 'logs'  # better for logs use elastic
 
 
 # Password validation

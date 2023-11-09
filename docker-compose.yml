@@ -2,18 +2,16 @@ version: '3.8'
 
 services:
   web:
-    build: .
-    container_name: checker_domain
+    image: controller
     restart: always
-    command: python3 manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./data/:/usr/src/data/
+    command: runserver 0.0.0.0:8000
     ports:
       - 8000:8000
     env_file:
       - ./.env.dev
     depends_on:
-      - db
+      - migrate
+
   db:
     image: postgres:14.4-alpine
     volumes:
@@ -23,8 +21,18 @@ services:
     ports:
       - 5432:5432
 
+  migrate:
+    image: controller
+    restart: on-failure
+    command: migrate
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+
   celery:
-    build: .
+    image: controller
+    entrypoint: ""
     command: celery --app=checkerDomains worker --loglevel=info --logfile=logs/celery.log
     restart: always
     volumes:
@@ -37,7 +45,8 @@ services:
       - db
 
   dashboard:
-    build: .
+    image: controller
+    entrypoint: ""
     command: celery flower -app=checkerDomains --port=5555 --broker=redis://redis:6379/0
     restart: always
     ports:
@@ -54,5 +63,3 @@ services:
     image: redis:4-alpine
     ports:
       - 6379:6379
-    volumes:
-      - ./redis/data/:/usr/src/app

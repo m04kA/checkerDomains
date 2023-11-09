@@ -33,7 +33,10 @@ class LinksView(APIView):
         links = serializer.validated_data.get('links')
         try:
             domains = linksParser.get_unique_domains_from_links(links)
-        except Exception as err:
+        except Exception as err:  # too common
+            # вот это не имеет смысла, потому что в случае исключения у тебя и так выбросится 500
+            # лучше напиши middleware, который в случае исключения будет как-то красиво логировать
+            # ошибку и возвращать 500 в нужном формате
             logger.error('Error while getting domains; links: %s; Error: %s', links, err)
             return Response({'message': 'Internal error', 'code': 'internal_error'}, status=500)
 
@@ -71,7 +74,7 @@ class LinksView(APIView):
 
 class DomainsView(APIView):
     def get(self, request: Request):
-        user_id = request.META.get('HTTP_X_USER_ID')
+        user_id = request.META.get('HTTP_X_USER_ID')  # на это тоже middleware можно
         if not user_id:
             return Response(
                 {'message': 'Request has not X-User-Id'},
@@ -89,7 +92,7 @@ class DomainsView(APIView):
                 start_period=start_period,
                 finish_period=finish_period
             )
-        except Exception as exc:
+        except Exception as exc:  # too common
             logger.error(
                 'Error while get history data; user_id: %s; '
                 'start_period: %s; finish_period: %s; Error: %s',
@@ -113,5 +116,6 @@ class DomainsView(APIView):
         user_domains_in_range = {'domains': set(), 'status': 'Ok'}
         for el in list(user_history.data):
             user_domains_in_range['domains'].add(el.get('domain'))
+        # тут лучше взять set(список доменов), это будет быстрее чем делать добавлять по одному
 
         return user_domains_in_range

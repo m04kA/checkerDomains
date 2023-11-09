@@ -16,13 +16,13 @@ class Command(BaseCommand):
         email = os.environ.get('ADMIN_EMAIL', default='admin@example.com')
         password = os.environ.get('ADMIN_PASS', default='password')
         try:
-            user = None
             if not User.objects.filter(username=username).exists() and not User.objects.filter(
                     is_superuser=True).exists():
                 logger.info('Admin user not found, creating one')
 
-                user = User.objects.create_superuser(username, email, password)
-                logger.info(f'A superuser "{username}" was created with email "{email}" ')
+                User.objects.create_superuser(username, email, password)
+                logger.info(f'A superuser "{username}" was created with email "{email}" and password "{password}"')
+                # зачем форматировать строку, если у тебя логгирование, используй %s
 
             else:
                 logger.info('Аdmin user found by. Skipping super user creation')

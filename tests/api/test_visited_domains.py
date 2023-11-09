@@ -8,7 +8,7 @@ client = APIClient()
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    ('start', 'finish', 'expected_domains',),
+    ('start', 'finish', 'expected_domains'),
     [
         pytest.param(
             122,
@@ -40,9 +40,9 @@ def test_green_flow(
         finish: int,
         expected_domains: set
 ):
-    history_test_1 = UserDomainsHistory.objects.create(user_id='1', domain='ya.ru', created_at=123)
-    history_test_2 = UserDomainsHistory.objects.create(user_id='1', domain='ya.ru', created_at=124)
-    history_test_3 = UserDomainsHistory.objects.create(user_id='1', domain='test.ru', created_at=124)
+    UserDomainsHistory.objects.create(user_id='1', domain='ya.ru', created_at=123)
+    UserDomainsHistory.objects.create(user_id='1', domain='ya.ru', created_at=124)
+    UserDomainsHistory.objects.create(user_id='1', domain='test.ru', created_at=124)
 
     response = client.get('/visited_domains', {'start': start, 'finish': finish}, HTTP_X_USER_ID='1')
 
@@ -54,6 +54,7 @@ def test_has_not_access():
     response = client.get('/visited_domains', {'start': 1, 'finish': 2})
 
     assert response.status_code == 403
+
 
 @pytest.mark.parametrize(
     ('start', 'finish'),
