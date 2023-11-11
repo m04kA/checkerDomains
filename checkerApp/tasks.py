@@ -1,6 +1,8 @@
 import logging
 import typing
 
+from django.db import IntegrityError
+
 from checkerApp.models import UserDomainsHistory
 from checkerApp.serializers import DomainsHistorySerializer
 from checkerDomains.celery import app
@@ -8,7 +10,7 @@ from checkerDomains.celery import app
 logger = logging.getLogger(__name__)
 
 
-@app.task
+@app.task(max_retries=3)
 def add_data_in_database(user_id: str, domains: typing.List[str], now: int):
     logger.info('Start task for load data user_id: %s', user_id)
 
@@ -31,7 +33,7 @@ def add_data_in_database(user_id: str, domains: typing.List[str], now: int):
             continue
         try:
             UserDomainsHistory.objects.create(**serializer_row_database.validated_data)
-        except Exception as exc:
+        except IntegrityError as exc:
             logger.error('Error while save history data; user_id: %s; Error: %s', user_id, exc)
             raise exc
     logger.info('Finish task for load data user_id: %s', user_id)

@@ -16,4 +16,4 @@ class UserDomainsHistory(models.Model):
         unique_together = ('user_id', 'domain', 'created_at',)
 
     def __str__(self):
-        return self.user_id, self.domain, self.created_at
+        return f'{self.user_id}, {self.domain}, {self.created_at}'

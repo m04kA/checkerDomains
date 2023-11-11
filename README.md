@@ -2,8 +2,9 @@ Hellow!
 For start use comands:
 
 ```
-1) docker-compose up -d --build
-2) docker-compose down (for finish)
+1) make start
+2) make stop (for finish)
+3) make test (for test)
 ```
 
 
@@ -47,7 +48,6 @@ curl --location 'http://127.0.0.1:8000/visited_domains?start=1&finish=1798938075
 --header 'X-User-Id: 1'
 ```
 
-Или просто в корне проекта выполнить `pytest`, он запустит автотесты.
 
 Проект разработан с расчётом, что авторизация произошла уже до этого и нам в хедере('X-User-Id') прилетает id
 пользователя. 
