@@ -4,7 +4,7 @@ import pytest
 
 from rest_framework.test import APIClient
 
-from checkerApp.src import linksParser
+from checkerApp.utils import linksParser
 from checkerApp.tasks import add_data_in_database
 
 client = APIClient()

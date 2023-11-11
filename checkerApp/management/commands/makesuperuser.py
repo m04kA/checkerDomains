@@ -16,15 +16,19 @@ class Command(BaseCommand):
         email = os.environ.get('ADMIN_EMAIL', default='admin@example.com')
         password = os.environ.get('ADMIN_PASS', default='password')
         try:
-            user = None
             if not User.objects.filter(username=username).exists() and not User.objects.filter(
                     is_superuser=True).exists():
                 logger.info('Admin user not found, creating one')
 
-                user = User.objects.create_superuser(username, email, password)
-                logger.info(f'A superuser "{username}" was created with email "{email}" ')
+                User.objects.create_superuser(username, email, password)
+                logger.info(
+                    'A superuser (%s) was created with email (%s) and password (%s);',
+                    username,
+                    email,
+                    password
+                )
 
             else:
                 logger.info('Аdmin user found by. Skipping super user creation')
-        except Exception as e:
-            logger.error(f'There was an error: {e}')
+        except Exception as err:
+            logger.error('There was an error: %s', err)

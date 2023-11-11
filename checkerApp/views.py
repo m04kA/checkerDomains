@@ -10,7 +10,7 @@ from rest_framework.request import Request
 
 from checkerApp.models import UserDomainsHistory
 from checkerApp.serializers import DomainsHistorySerializer
-from checkerApp.src import linksParser
+from checkerApp.utils import linksParser
 from checkerApp import serializers
 from checkerApp.tasks import add_data_in_database
 
